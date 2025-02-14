@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 
 public class BinarySearchTree : IEnumerable<int>
 {
@@ -11,12 +12,12 @@ public class BinarySearchTree : IEnumerable<int>
     {
         // Create new node
         Node newNode = new(value);
-        // If the list is empty, then point both head and tail to the new node.
+        // If the tree is empty, point the root to the new node.
         if (_root is null)
         {
             _root = newNode;
         }
-        // If the list is not empty, then only head will be affected.
+        // If the tree is not empty, insert recursively.
         else
         {
             _root.Insert(value);
@@ -38,7 +39,7 @@ public class BinarySearchTree : IEnumerable<int>
     /// </summary>
     IEnumerator IEnumerable.GetEnumerator()
     {
-        // call the generic version of the method
+        // Call the generic version of the method
         return GetEnumerator();
     }
 
@@ -66,9 +67,9 @@ public class BinarySearchTree : IEnumerable<int>
     }
 
     /// <summary>
-    /// Iterate backward through the BST.
+    /// Iterate backward through the BST (Problem 3)
     /// </summary>
-    public IEnumerable Reverse()
+    public IEnumerable<int> Reverse()
     {
         var numbers = new List<int>();
         TraverseBackward(_root, numbers);
@@ -80,11 +81,19 @@ public class BinarySearchTree : IEnumerable<int>
 
     private void TraverseBackward(Node? node, List<int> values)
     {
-        // TODO Problem 3
+        if (node is not null)
+        {
+            // Traverse the right subtree first (largest value first)
+            TraverseBackward(node.Right, values);
+            // Visit the current node
+            values.Add(node.Data);
+            // Traverse the left subtree (smallest values last)
+            TraverseBackward(node.Left, values);
+        }
     }
 
     /// <summary>
-    /// Get the height of the tree
+    /// Get the height of the tree (Problem 4)
     /// </summary>
     public int GetHeight()
     {
@@ -99,8 +108,10 @@ public class BinarySearchTree : IEnumerable<int>
     }
 }
 
-public static class IntArrayExtensionMethods {
-    public static string AsString(this IEnumerable array) {
+public static class IntArrayExtensionMethods
+{
+    public static string AsString(this IEnumerable array)
+    {
         return "<IEnumerable>{" + string.Join(", ", array.Cast<int>()) + "}";
     }
 }
